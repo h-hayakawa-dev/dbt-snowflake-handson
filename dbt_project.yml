@@ -1,0 +1,63 @@
+name: 'snowflake_handson'
+version: '1.0.0'
+
+profile: 'default'
+
+model-paths: ["models"]
+macro-paths: ["macros"]
+snapshot-paths: ["snapshots"]
+test-paths: ["tests"]
+seed-paths: ["seeds"]
+
+target-path: "target"
+clean-targets:
+  - "target"
+  - "dbt_packages"
+
+models:
+  snowflake_handson:
+    staging:
+      +database: STAGING
+      +materialized: table
+      +tags: ["layer_staging"]
+      +persist_docs:
+        relation: true
+        columns: true
+      handson:
+        +schema: HANDSON
+    trusted:
+      +database: TRUSTED
+      +materialized: table
+      +tags: ["layer_trusted"]
+      +persist_docs:
+        relation: true
+        columns: true
+      handson:
+        +schema: HANDSON
+    trusted_covered:
+      +database: TRUSTED_COVERED
+      +materialized: table
+      +tags: ["layer_trusted_covered"]
+      +persist_docs:
+        relation: true
+        columns: true
+      handson:
+        +schema: HANDSON
+    intermediate:
+      +database: INTERMEDIATE
+      +materialized: table
+      +tags: ["layer_intermediate"]
+      +persist_docs:
+        relation: true
+        columns: true
+      handson:
+        +schema: HANDSON
+    datamart:
+      +database: DATAMART
+      +materialized: table
+      +tags: ["layer_datamart"]
+      +persist_docs:
+        relation: true
+        columns: true
+      handson:
+        +schema: HANDSON
