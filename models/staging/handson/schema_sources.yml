@@ -1,0 +1,26 @@
+version: 2
+
+sources:
+  # ① TPC-Hサンプルデータ（メイン学習素材）
+  - name: TPCH
+    database: SNOWFLAKE_SAMPLE_DATA
+    schema: TPCH_SF1
+    description: "Snowflake標準搭載のTPC-Hサンプルデータ（架空のEC取引）"
+    tables:
+      - name: ORDERS
+        description: "注文ヘッダ"
+      - name: CUSTOMER
+        description: "顧客マスタ"
+      - name: LINEITEM
+        description: "注文明細"
+
+  # ② 内部ステージから取り込んだマスタ（S3外部テーブルの代役）
+  - name: EXT_STAGE_TEST
+    database: STAGING
+    schema: EXT_STAGE_TEST
+    loader: S3   # 🏢本来はS3外部テーブル。代役である印として残す
+    description: "ソースデータ（本来はS3外部テーブル。ハンズオンでは内部ステージ+COPYで代用）"
+    tables:
+      - name: REGION_MASTER
+        description: "地域マスタ（External tableの代役）"
+
