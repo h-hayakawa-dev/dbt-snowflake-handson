@@ -1,27 +1,63 @@
-name: 'snowflake_handson'  # プロジェクト名
-profile: 'default'  # どの接続profileを使うか
-model-paths: ["models"]  # モデルはmodelsフォルダ、の宣言
-macro-paths: ["macros"]  # 以下、各種フォルダの場所
+name: 'snowflake_handson'
+version: '1.0.0'
 
+profile: 'default'
 
-# Configuring models
-# Full documentation: https://docs.getdbt.com/docs/configuring-models
+model-paths: ["models"]
+macro-paths: ["macros"]
+snapshot-paths: ["snapshots"]
+test-paths: ["tests"]
+seed-paths: ["seeds"]
 
-# In dbt, the default materialization for a model is a view. This means, when you run 
-# dbt run or dbt build, all of your models will be built as a view in your data platform. 
-# The configuration below will override this setting for models in the example folder to 
-# instead be materialized as tables. Any models you add to the root of the models folder will 
-# continue to be built as views. These settings can be overridden in the individual model files
-# using the `{{ config(...) }}` macro.
+target-path: "target"
+clean-targets:
+  - "target"
+  - "dbt_packages"
 
 models:
-  staging:
-      +database: STAGING  # このレイヤーは STAGING データベースに作る
+  snowflake_handson:
+    staging:
+      +database: STAGING
       +materialized: table
-      +tags: ["layer_staging"]  # このフォルダのモデル全部に layer_staging タグを付与
-      +persist_docs:  # 説明文をSnowflake側にも反映（下で解説）
-        relation: true  # テーブル/ビューの説明をSnowflakeに反映
-        columns: true  # カラムの説明も反映
+      +tags: ["layer_staging"]
+      +persist_docs:
+        relation: true
+        columns: true
       handson:
         +schema: HANDSON
-
+    trusted:
+      +database: TRUSTED
+      +materialized: table
+      +tags: ["layer_trusted"]
+      +persist_docs:
+        relation: true
+        columns: true
+      handson:
+        +schema: HANDSON
+    trusted_covered:
+      +database: TRUSTED_COVERED
+      +materialized: table
+      +tags: ["layer_trusted_covered"]
+      +persist_docs:
+        relation: true
+        columns: true
+      handson:
+        +schema: HANDSON
+    intermediate:
+      +database: INTERMEDIATE
+      +materialized: table
+      +tags: ["layer_intermediate"]
+      +persist_docs:
+        relation: true
+        columns: true
+      handson:
+        +schema: HANDSON
+    datamart:
+      +database: DATAMART
+      +materialized: table
+      +tags: ["layer_datamart"]
+      +persist_docs:
+        relation: true
+        columns: true
+      handson:
+        +schema: HANDSON
