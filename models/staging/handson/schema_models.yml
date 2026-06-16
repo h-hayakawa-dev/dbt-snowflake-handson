@@ -1,0 +1,51 @@
+version: 2
+
+models:
+  - name: stg_orders
+    description: "注文ヘッダ(ソース直後)。粒度: 1行=1注文" 
+    columns:
+      - name: order_key
+        description: "注文を一意に識別するID。ORDERテーブルに対応"
+        tests:
+          - unique
+          - not_null
+      - name: customer_key
+        description: "顧客ID"
+      - name: status_code
+        description: "注文ステータスコード(O/F/P)"
+      - name: total_price
+        description: "注文合計金額"
+      - name: order_date
+        description: "注文日"
+
+  - name: stg_customers
+    description: "顧客マスタ(ソース直後)。粒度: 1行=1顧客"
+    columns:
+      - name: customer_key
+        description: "顧客ID(主キー)"
+        tests:
+          - unique
+          - not_null
+
+  - name: stg_lineitems
+    description: "注文明細(ソース直後)。粒度: 1行=1注文×1明細行"
+    columns:
+      - name: order_key
+        description: "注文ID"
+        tests:
+          - not_null
+      - name: line_number
+        description: "明細行番号(注文内の連番)"
+
+  - name: stg_region_master
+    description: "地域マスタ(内部ステージ取込)。粒度: 1行=1地域"
+    columns:
+      - name: region_code
+        description: "地域コード(主キー)"
+        tests:
+          - unique
+          - not_null
+
+    
+
+           
