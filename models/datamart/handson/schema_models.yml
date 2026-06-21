@@ -1,0 +1,15 @@
+version: 2
+
+models:
+  - name: mart_sales_daily
+    description: "日次売上マート。粒度: 1行=1注文日"
+    columns:
+      - name: order_date
+        description: "注文日(主キー)"
+        tests:
+          - unique
+          - not_null
+      - name: sales_amount
+        description: "日次売上金額"
+        tests:
+          - not_null
