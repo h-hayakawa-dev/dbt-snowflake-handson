@@ -1,0 +1,21 @@
+version: 2
+
+models:
+  - name: trusted_covered_orders
+    description: "注文ヘッダ(ビジネス加工済)。粒度: 1行=1注文"
+    columns:
+      - name: order_key
+        description: "注文ID(主キー)"
+        tests:
+        - unique
+        - not_null
+      - name: status_name
+        description: "注文ステータス名称(コード値の日本語変換)"
+        tests:
+          - accepted_values:
+              arguments:
+                values: ['オープン', '完了', '処理中']
+      - name: is_large_order
+        description: "高額注文フラグ(10万以上)"
+      - name: order_year_month
+        description: "注文年月(YYYY-MM)"
