@@ -1,0 +1,49 @@
+version: 2
+
+models:
+  - name: trusted_orders
+    description: "注文ヘッダ(クレンジング済)。粒度: 1行1注文(order_keyで一意)"
+    columns:
+      - name: order_key
+        description: "注文ID(主キー)"
+        tests:
+          - unique
+          - not_null
+          
+      - name: customer_key  # どのカラムに対するテストか
+        description: "顧客ID"
+        tests:
+          - relationships:     # 参照整合性テスト
+              arguments: 
+                to: ref('trusted_customers')  # ←参照先のテーブル
+                field: customer_key  # ←参照先のカラム
+
+  - name: trusted_customers
+    description: "顧客マスタ(クレンジング済)。粒度: 1行=1顧客(customer_keyで一意)"
+    columns:
+      - name: customer_key
+        description: "顧客ID(主キー)"
+        tests:
+          - unique
+          - not_null
+          
+  - name: trusted_lineitems
+    description: "注文明細(クレンジング済)。粒度: 1行=1注文ID X 明細行番号で一意"
+    tests:  # モデル直下のテスト(カラムの下ではない)
+      # IDがない場合の粒度チェック: 複合カラムのユニーク性
+      - dbt_utils.unique_combination_of_columns:  # テスト名(パッケージ名.テスト名)
+          arguments: 
+            combination_of_columns:  # ← 引数: 一意であるべき列の組み合わせ
+              - order_key
+              - line_number
+      
+    columns:
+      - name: order_key
+        description: "注文ID"
+        tests:
+          - not_null
+      - name: line_number
+        description: "明細行番号"
+        tests:
+          - not_null
+          
